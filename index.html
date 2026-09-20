@@ -3,37 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的生圖網站</title>
+    <title>我的 AI 生圖網站</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 50px;
+            padding: 30px;
             background-color: #f4f4f9;
         }
         h1 {
             color: #333;
         }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
         input[type="text"] {
-            width: 60%;
+            width: 80%;
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            margin-bottom: 15px;
         }
         button {
-            padding: 10px 20px;
+            padding: 10px 25px;
             font-size: 16px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 10px;
         }
         button:hover {
             background-color: #218838;
         }
+        #loading {
+            display: none;
+            margin-top: 15px;
+            color: #666;
+        }
+        #resultImage {
+            max-width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>我的 AI 生圖網站</h1>
+        <p>請輸入提示詞（建議使用英文效果最好，例如：cute cat in space）：</p>
+        
+        <input type="text" id="promptInput" placeholder="輸入你想生成的畫面...">
+        <br>
+        <button onclick="generateImage()">開始生圖</button>
+        
+        <div id="loading">AI 正在努力作畫中，請稍候...</div>
+        <div>
+            <img id="resultImage" alt="AI 生成圖片">
+        </div>
+    </div>
+
+    <script>
+        function generateImage() {
+            const promptText = document.getElementById('promptInput').value.trim();
+            const resultImg = document.getElementById('resultImage');
+            const loading = document.getElementById('loading');
+
+            if(!promptText) {
+                alert('請先輸入提示詞！');
+                return;
+            }
+
+            // 顯示載入中訊息，隱藏舊圖片
+            loading.style.display = 'block';
+            resultImg.style.display = 'none';
+
+            // 使用免費且不需要 API Key 的 Pollinations AI 圖片生成服務
+            const encodedPrompt = encodeURIComponent(promptText);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&nologo=true`;
+
+            // 預先載入圖片
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = function() {
+                resultImg.src = imageUrl;
+                loading.style.display = 'none';
+                resultImg.style.display = 'inline-block';
+            };
+            img.onerror = function() {
+                loading.style.display = 'none';
+                alert('生成圖片失敗，請稍後再試！');
+            };
+        }
+    </script>
+
+</body>
+</html>
     </style>
 </head>
 <body>
