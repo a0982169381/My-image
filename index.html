@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的生圖網站</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"] {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>我的 AI 生圖網站</h1>
+    <p>請在下方輸入你想生成的畫面提示詞：</p>
+    
+    <input type="text" id="promptInput" placeholder="例如：一隻可愛的小貓在星空下散步...">
+    <button onclick="generateImage()">開始生圖</button>
+
+    <script>
+        function generateImage() {
+            const promptText = document.getElementById('promptInput').value;
+            if(!promptText) {
+                alert('請先輸入提示詞！');
+                return;
+            }
+            alert('你輸入的提示詞是: ' + promptText + '\n（接下來我們可以串接 AI 生圖 API 來產出圖片！）');
+        }
+    </script>
+
+</body>
+</html>
