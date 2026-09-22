@@ -18,10 +18,11 @@ app.post('/webhook', async (c) => {
 })
 
 const port = process.env.PORT || 3000
-console.log(`Server is running on port ${port}`)
 
 serve({
   fetch: app.fetch,
   port: Number(port),
   host: '0.0.0.0'
+}, (info) => {
+  console.log(`Server is running on http://0.0.0.0:${info.port}`)
 })
