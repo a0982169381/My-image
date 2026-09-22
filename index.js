@@ -32,7 +32,7 @@ app.post('/webhook', async (c) => {
         const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN
         
         // 暫時手動填入你的 Gemini API Key 進行測試
-        const geminiKey = process.env.GEMINI_API_KEY || '你的Gemini金鑰貼在這裡'
+        const geminiKey = process.env.GEMINI_API_KEY || 'AQ.Ab8RN6K4hlDKTzCfPP9Libt_y7y8tZg8aEK-UNeMkCfcObZa-Q'
 
         let replyText = ''
 
