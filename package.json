@@ -6,6 +6,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.0",
     "hono": "^4.6.6"
   }
 }
