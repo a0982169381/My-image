@@ -1,5 +1,5 @@
+import { createServer } from 'http'
 import { Hono } from 'hono'
-import { serve } from '@hono/node-server'
 
 const app = new Hono()
 
@@ -19,10 +19,15 @@ app.post('/webhook', async (c) => {
 
 const port = process.env.PORT || 3000
 
-serve({
-  fetch: app.fetch,
-  port: Number(port),
-  host: '0.0.0.0'
-}, (info) => {
-  console.log(`Server is running on http://0.0.0.0:${info.port}`)
+const server = createServer((req, res) => {
+  // 將 Node.js 的 Request 轉換給 Hono 處理
+  app.fetch(req, res).catch((err) => {
+    console.error(err)
+    res.statusCode = 500
+    res.end('Internal Server Error')
+  })
+})
+
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running on port ${port}`)
 })
