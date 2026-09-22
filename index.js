@@ -32,31 +32,23 @@ app.post('/webhook', async (c) => {
         const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN
         
         const spots = getSpots()
-        const prompt = `你是一個專業貼心的旅遊助理。使用者問：「${userMessage}」。\n我們資料庫裡目前的私房景點有：${JSON.stringify(spots)}。\n請根據使用者的提問，給予自然、親切且有幫助的旅遊建議。如果使用者問的是其他地區，請發揮你的知識幫忙解答！`
-
+        
+        // 根據使用者輸入的關鍵字或預設問題，從 spots.json 尋找相符的景點
         let replyText = ''
+        const matchedSpots = spots.filter(spot => 
+          userMessage.includes(spot.name) || 
+          userMessage.includes(spot.category) || 
+          userMessage.includes(spot.location) ||
+          userMessage.includes('推薦') ||
+          userMessage.includes('景點')
+        )
 
-        try {
-          // 將模型改為 gemini-pro 確保穩定支援
-          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AQ.Ab8RN6JIzlu7TjiSzTWUeDy-fTNdS4FvZLPkMTmwiAfIGC9dQg`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              contents: [{
-                parts: [{ text: prompt }]
-              }]
-            })
-          })
-          const geminiData = await geminiRes.json()
-          
-          console.log("Gemini API Response:", JSON.stringify(geminiData));
-
-          replyText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || `API回傳錯誤: ${JSON.stringify(geminiData)}`
-        } catch (err) {
-          console.error("Gemini Fetch Error:", err)
-          replyText = '呼叫 Gemini 發生例外錯誤！'
+        if (matchedSpots.length > 0) {
+          replyText = `這是為您找到的推薦景點：\n` + 
+            matchedSpots.map(s => `📍 ${s.name} (${s.location})\n💡 ${s.description}`).join('\n\n')
+        } else {
+          replyText = `收到您的訊息：「${userMessage}」。目前我們的私房景點資料庫包含：\n` +
+            spots.map(s => `📍 ${s.name} (${s.location})`).join('\n')
         }
 
         // 回傳給 LINE
