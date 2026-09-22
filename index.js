@@ -31,39 +31,32 @@ app.post('/webhook', async (c) => {
         const replyToken = event.replyToken
         const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN
         
-        // 直接在這裡宣告你的 Gemini API Key
-        const geminiKey = process.env.GEMINI_API_KEY || 'AQ.Ab8RN6K4hlDKTzCfPP9Libt_y7y8tZg8aEK-UNeMkCfcObZa-Q'
+        const spots = getSpots()
+        const prompt = `你是一個專業貼心的旅遊助理。使用者問：「${userMessage}」。\n我們資料庫裡目前的私房景點有：${JSON.stringify(spots)}。\n請根據使用者的提問，給予自然、親切且有幫助的旅遊建議。如果使用者問的是其他地區，請發揮你的知識幫忙解答！`
 
         let replyText = ''
 
-        if (geminiKey) {
-          const spots = getSpots()
-          const prompt = `你是一個專業貼心的旅遊助理。使用者問：「${userMessage}」。\n我們資料庫裡目前的私房景點有：${JSON.stringify(spots)}。\n請根據使用者的提問，給予自然、親切且有幫助的旅遊建議。如果使用者問的是其他地區，請發揮你的知識幫忙解答！`
-
-          try {
-            const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                contents: [{
-                  parts: [{ text: prompt }]
-                }]
-              })
+        try {
+          // 直接將金鑰寫死在網址參數中測試
+          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AQ.Ab8RN6JIzlu7TjiSzTWUeDy-fTNdS4FvZLPkMTmwiAfIGC9dQg`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              contents: [{
+                parts: [{ text: prompt }]
+              }]
             })
-            const geminiData = await geminiRes.json()
-            
-            // 印出詳細的 API 回傳結果到 Railway 日誌
-            console.log("Gemini API Response:", JSON.stringify(geminiData));
+          })
+          const geminiData = await geminiRes.json()
+          
+          console.log("Gemini API Response:", JSON.stringify(geminiData));
 
-            replyText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || `API回傳錯誤: ${JSON.stringify(geminiData)}`
-          } catch (err) {
-            console.error("Gemini Fetch Error:", err)
-            replyText = '呼叫 Gemini 發生例外錯誤！'
-          }
-        } else {
-          replyText = '收到你的訊息囉！(尚未設定 Gemini Key)'
+          replyText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || `API回傳錯誤: ${JSON.stringify(geminiData)}`
+        } catch (err) {
+          console.error("Gemini Fetch Error:", err)
+          replyText = '呼叫 Gemini 發生例外錯誤！'
         }
 
         // 回傳給 LINE
