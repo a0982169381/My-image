@@ -14,19 +14,61 @@
   {
     "name": "曼谷鄭王廟 (黎明寺)",
     "location": "泰國曼谷",
-    "category": "寺廟",
+    "category": "寺廟地標",
     "description": "昭披耶河畔的地標，以精緻的彩色瓷磚裝飾聞名，夕陽西下時非常壯觀。"
   },
   {
     "name": "曼谷洽圖洽周末市集",
     "location": "泰國曼谷",
-    "category": "購物",
+    "category": "購物市集",
     "description": "全球最大的跳蚤市場之一，擁有上萬個攤位，從服飾到手作小物應有盡有。"
   },
   {
-    "name": "曼谷水門市場與 Pratunam",
+    "name": "曼谷考山路",
     "location": "泰國曼谷",
-    "category": "美食購物",
-    "description": "體驗在地泰式小吃、海南雞飯與平價服飾批發的好去處。"
+    "category": "夜生活",
+    "description": "背包客的天堂，充滿異國風情的酒吧、街頭小吃與熱鬧的音樂。"
+  },
+  {
+    "name": "喬德夜市 (Jodd Fairs)",
+    "location": "泰國曼谷",
+    "category": "美食夜市",
+    "description": "曼谷超人氣夜市，必吃火山排骨、水果西施以及各式道地泰國小吃。"
+  },
+  {
+    "name": "拉差達火車夜市 / The One Ratchada",
+    "location": "泰國曼谷",
+    "category": "美食夜市",
+    "description": "交通便利的熱鬧夜市，有豐富的服飾攤販與美味海鮮串燒。"
+  },
+  {
+    "name": "曼谷 Iconsiam (暹羅天地)",
+    "location": "泰國曼谷",
+    "category": "百貨購物",
+    "description": "結合奢華購物與室內水上市場（SookSiam）的超級地標，冷氣舒適且小吃齊全。"
+  },
+  {
+    "name": "美功鐵道市場",
+    "location": "泰國曼谷近郊",
+    "category": "特色景點",
+    "description": "攤販們緊鄰鐵軌擺攤，當火車經過時迅速收起遮雨棚的奇觀。"
+  },
+  {
+    "name": "Let's Relax Spa",
+    "location": "泰國曼谷",
+    "category": "SPA按摩",
+    "description": "泰國連鎖的高品質平價按摩品牌，環境乾淨舒適，按完還有招牌芒果糯米飯。"
+  },
+  {
+    "name": "Health Land Spa",
+    "location": "泰國曼谷",
+    "category": "SPA按摩",
+    "description": "當地老牌且規模宏大的頂級按摩會館，空間氣派、價格實惠，是放鬆筋骨的首選。"
+  },
+  {
+    "name": "Asiatique The Riverfront 碼頭夜市",
+    "location": "泰國曼谷",
+    "category": "夜市商場",
+    "description": "位於河畔的歐風舊倉庫改建商場，有大型摩天輪、文創小物與浪漫夜景。"
   }
 ]
