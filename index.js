@@ -8,9 +8,14 @@ app.get('/', (c) => {
 })
 
 app.post('/webhook', async (c) => {
-  const body = await c.req.json()
-  console.log('Received LINE webhook:', JSON.stringify(body))
-  return c.json({ status: 'ok' })
+  try {
+    const body = await c.req.json()
+    console.log('Received LINE webhook:', JSON.stringify(body))
+  } catch (e) {
+    console.error('Error parsing JSON:', e)
+  }
+  // 確保無論如何都回傳 200 OK 讓 LINE 通過驗證
+  return c.json({ status: 'ok' }, 200)
 })
 
 const port = process.env.PORT || 3000
