@@ -5,6 +5,7 @@ import path from 'path'
 
 const app = new Hono()
 
+// 讀取本地 spots.json 景點資料
 const getSpots = () => {
   try {
     const filePath = path.resolve('spots.json')
@@ -33,6 +34,7 @@ app.post('/webhook', async (c) => {
 
         let replyText = ''
 
+        // 檢查是否有設定 Gemini Key
         if (geminiKey) {
           const spots = getSpots()
           const prompt = `你是一個專業貼心的旅遊助理。使用者問：「${userMessage}」。\n我們資料庫裡目前的私房景點有：${JSON.stringify(spots)}。\n請根據使用者的提問，給予自然、親切且有幫助的旅遊建議。如果使用者問的是其他地區，請發揮你的知識幫忙解答！`
