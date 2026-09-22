@@ -37,8 +37,8 @@ app.post('/webhook', async (c) => {
         let replyText = ''
 
         try {
-          // 直接將金鑰寫死在網址參數中測試
-          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AQ.Ab8RN6JIzlu7TjiSzTWUeDy-fTNdS4FvZLPkMTmwiAfIGC9dQg`, {
+          // 將模型改為 gemini-pro 確保穩定支援
+          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AQ.Ab8RN6JIzlu7TjiSzTWUeDy-fTNdS4FvZLPkMTmwiAfIGC9dQg`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
