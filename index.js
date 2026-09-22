@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { serve } from '@hono/node-server'
 
 const app = new Hono()
 
@@ -17,11 +16,4 @@ app.post('/webhook', async (c) => {
   return c.json({ status: 'ok' }, 200)
 })
 
-const port = process.env.PORT || 3000
-console.log(`Server is running on port ${port}`)
-
-serve({
-  fetch: app.fetch,
-  port: Number(port),
-  host: '0.0.0.0'
-})
+export default app
