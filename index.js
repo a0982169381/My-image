@@ -1,5 +1,5 @@
+import { createServer } from 'http'
 import { Hono } from 'hono'
-import { serve } from '@hono/node-server'
 
 const app = new Hono()
 
@@ -19,10 +19,34 @@ app.post('/webhook', async (c) => {
 
 const port = Number(process.env.PORT) || 8080
 
-serve({
-  fetch: app.fetch,
-  port: port,
-  host: '0.0.0.0'
-}, (info) => {
-  console.log(`Server is running on http://0.0.0.0:${info.port}`)
+const server = createServer(async (req, res) => {
+  // 將 Node.js 請求轉換成 Fetch Request 傳給 Hono 處理
+  const url = `http://${req.headers.host || 'localhost'}${req.url}`
+  const chunks = []
+  for await (const chunk of req) {
+    chunks.push(chunk)
+  }
+  const body = chunks.length > 0 ? Buffer.concat(chunks) : undefined
+
+  const init = {
+    method: req.method,
+    headers: req.headers,
+  }
+  if (req.method !== 'GET' && req.method !== 'HEAD' && body) {
+    init.body = body
+  }
+
+  const response = await app.fetch(new Request(url, init))
+  
+  res.statusCode = response.status
+  response.headers.forEach((value, key) => {
+    res.setHeader(key, value)
+  })
+  
+  const resBody = await response.arrayBuffer()
+  res.end(Buffer.from(resBody))
+})
+
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running on http://0.0.0.0:${port}`)
 })
