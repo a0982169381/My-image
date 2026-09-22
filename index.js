@@ -14,7 +14,6 @@ app.post('/webhook', async (c) => {
   } catch (e) {
     console.error('Error parsing JSON:', e)
   }
-  // 確保無論如何都回傳 200 OK 讓 LINE 通過驗證
   return c.json({ status: 'ok' }, 200)
 })
 
@@ -23,5 +22,6 @@ console.log(`Server is running on port ${port}`)
 
 serve({
   fetch: app.fetch,
-  port: Number(port)
+  port: Number(port),
+  host: '0.0.0.0'
 })
