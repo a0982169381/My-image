@@ -1,0 +1,8 @@
+{
+  "name": "my-image",
+  "version": "1.0.0",
+  "main": "index.tsx",
+  "dependencies": {
+    "hono": "^4.6.0"
+  }
+}
