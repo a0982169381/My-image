@@ -33,7 +33,7 @@ app.post('/webhook', async (c) => {
         
         const spots = getSpots()
         
-        // 根據使用者輸入的關鍵字或預設問題，從 spots.json 尋找相符的景點
+        // 根據使用者輸入從 spots.json 尋找相符的景點
         let replyText = ''
         const matchedSpots = spots.filter(spot => 
           userMessage.includes(spot.name) || 
@@ -44,10 +44,10 @@ app.post('/webhook', async (c) => {
         )
 
         if (matchedSpots.length > 0) {
-          replyText = `這是為您找到的推薦景點：\n` + 
+          replyText = `這是為您找到的推薦景點：\n\n` + 
             matchedSpots.map(s => `📍 ${s.name} (${s.location})\n💡 ${s.description}`).join('\n\n')
         } else {
-          replyText = `收到您的訊息：「${userMessage}」。目前我們的私房景點資料庫包含：\n` +
+          replyText = `收到您的訊息：「${userMessage}」。目前我們的私房景點資料庫包含：\n\n` +
             spots.map(s => `📍 ${s.name} (${s.location})`).join('\n')
         }
 
