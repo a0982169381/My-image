@@ -1,5 +1,5 @@
-import { createServer } from 'http'
 import { Hono } from 'hono'
+import { serve } from '@hono/node-server'
 
 const app = new Hono()
 
@@ -17,36 +17,11 @@ app.post('/webhook', async (c) => {
   return c.json({ status: 'ok' }, 200)
 })
 
-// 必須完全採用 Railway 指派的 process.env.PORT
-const port = Number(process.env.PORT) || 3000
+const port = Number(process.env.PORT) || 8080
 
-const server = createServer(async (req, res) => {
-  const url = `http://${req.headers.host || 'localhost'}${req.url}`
-  const chunks = []
-  for await (const chunk of req) {
-    chunks.push(chunk)
-  }
-  const body = chunks.length > 0 ? Buffer.concat(chunks) : undefined
-
-  const init = {
-    method: req.method,
-    headers: req.headers,
-  }
-  if (req.method !== 'GET' && req.method !== 'HEAD' && body) {
-    init.body = body
-  }
-
-  const response = await app.fetch(new Request(url, init))
-  
-  res.statusCode = response.status
-  response.headers.forEach((value, key) => {
-    res.setHeader(key, value)
-  })
-  
-  const resBody = await response.arrayBuffer()
-  res.end(Buffer.from(resBody))
-})
-
-server.listen(port, '0.0.0.0', () => {
-  console.log(`Server is running on port ${port}`)
+serve({
+  fetch: app.fetch,
+  port: port
+}, (info) => {
+  console.log(`Server is running on port ${info.port}`)
 })
