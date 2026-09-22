@@ -17,10 +17,10 @@ app.post('/webhook', async (c) => {
   return c.json({ status: 'ok' }, 200)
 })
 
-const port = Number(process.env.PORT) || 8080
+// 必須完全採用 Railway 指派的 process.env.PORT
+const port = Number(process.env.PORT) || 3000
 
 const server = createServer(async (req, res) => {
-  // 將 Node.js 請求轉換成 Fetch Request 傳給 Hono 處理
   const url = `http://${req.headers.host || 'localhost'}${req.url}`
   const chunks = []
   for await (const chunk of req) {
@@ -48,5 +48,5 @@ const server = createServer(async (req, res) => {
 })
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`Server is running on http://0.0.0.0:${port}`)
+  console.log(`Server is running on port ${port}`)
 })
