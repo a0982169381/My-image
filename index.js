@@ -11,6 +11,8 @@ app.post('/webhook', async (c) => {
   try {
     const body = await c.req.json()
     console.log('Received LINE webhook:', JSON.stringify(body))
+    
+    // 確保即使收到 LINE 的測試事件也能立即回傳 200 避免 Timeout
   } catch (e) {
     console.error('Error parsing JSON:', e)
   }
@@ -20,7 +22,6 @@ app.post('/webhook', async (c) => {
 const port = process.env.PORT || 3000
 
 const server = createServer((req, res) => {
-  // 將 Node.js 的 Request 轉換給 Hono 處理
   app.fetch(req, res).catch((err) => {
     console.error(err)
     res.statusCode = 500
