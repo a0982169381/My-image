@@ -5,7 +5,6 @@ import path from 'path'
 
 const app = new Hono()
 
-// 讀取 JSON 景點資料
 const getSpots = () => {
   try {
     const filePath = path.resolve('spots.json')
@@ -30,20 +29,34 @@ app.post('/webhook', async (c) => {
         const userMessage = event.message.text
         const replyToken = event.replyToken
         const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN
+        const openAiKey = process.env.OPENAI_API_KEY
 
-        let replyText = '收到你的訊息囉！'
+        let replyText = ''
 
-        // 簡單的關鍵字觸發
-        if (userMessage.includes('景點') || userMessage.includes('推薦')) {
+        // 如果有設定 OpenAI，交給 AI 聰明回答
+        if (openAiKey) {
           const spots = getSpots()
-          if (spots.length > 0) {
-            replyText = '為你推薦以下私房景點：\n' + spots.map(s => `- ${s.name} (${s.tag})\n  ${s.description}`).join('\n\n')
-          } else {目前沒有景點資料}
+          const prompt = `你是一個專業貼心的旅遊助理。使用者問：「${userMessage}」。\n我們資料庫裡目前的私房景點有：${JSON.stringify(spots)}。\n請根據使用者的提問，給予自然、親切且有幫助的旅遊建議。如果使用者問的是其他地區，也可以發揮 AI 知識幫忙解答！`
+
+          const aiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${openAiKey}`
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [{ role: 'user', content: prompt }],
+              temperature: 0.7
+            })
+          })
+          const aiData = await aiRes.json()
+          replyText = aiData.choices?.[0]?.message?.content || '抱歉，我現在有點累，請稍後再試一次！'
         } else {
-          replyText = `你想了解哪裡的旅遊資訊呢？試著輸入「推薦景點」看看吧！`
+          replyText = '收到你的訊息囉！(尚未設定 OpenAI Key)'
         }
 
-        // 呼叫 LINE Messaging API 回傳訊息
+        // 回傳給 LINE
         await fetch('https://api.line.me/v2/bot/message/reply', {
           method: 'POST',
           headers: {
