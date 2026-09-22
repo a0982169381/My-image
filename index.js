@@ -32,6 +32,9 @@ app.post('/webhook', async (c) => {
         const accessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN
         const geminiKey = process.env.GEMINI_API_KEY
 
+        // 偵錯日誌：印出是否有抓到 Key
+        console.log("DEBUG - GEMINI_API_KEY value:", geminiKey ? "已有值 (長度: " + geminiKey.length + ")" : "是空的/undefined");
+
         let replyText = ''
 
         // 檢查是否有設定 Gemini Key
