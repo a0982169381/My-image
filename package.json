@@ -1,8 +1,9 @@
 {
   "name": "my-image",
   "version": "1.0.0",
-  "main": "index.tsx",
+  "main": "index.js",
   "dependencies": {
-    "hono": "^4.6.0"
+    "hono": "^4.6.6",
+    "@hono/node-server": "^1.13.0"
   }
 }
